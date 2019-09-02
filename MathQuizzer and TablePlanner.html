@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<html>
+	<head>
+		<title>Math Quizzer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+		<script>
+		var operator = ""; //global variable for operator
+		
+		/*
+		 *	Set the operator variable for checkAnswer() to function properly
+		*/
+		function setOperator(value) {
+			operator = value;
+		}
+			
+		function checkAnswer() {
+			//get 3 values typed in by user
+			var a = document.getElementById('a').value;
+			var b = document.getElementById('b').value;
+			var userAnswer = document.getElementById('userAnswer').value;
+			
+			//tell user to fill out all required boxes
+			if (!a || !b || !userAnswer) {
+				document.getElementById('outputResult').innerHTML = "Please fill out all the boxes!"
+				return;
+			}
+			
+			//tell users to select operator if they haven't
+			if (operator == "") {
+				document.getElementById('outputResult').innerHTML = "Please select your operator!"
+				return;
+			}
+			//calculate answer
+			var answer = eval(a + operator + b);
+			
+			//compare user's answer to calculated answer and output message
+			if (Math.abs(answer-userAnswer) <= 0.001) {	//make sure answer is within 0.001 (to the hundred)
+				document.getElementById('outputResult').innerHTML = "Great Job! " + a + " " + operator + " " + b + " = " + answer;
+			} else {
+				document.getElementById('outputResult').innerHTML = "Almost! Try Again. The correct answer is " + a + " " + operator + " " + b + " = " + answer;
+			}
+		}
+		
+		function calcTableNumbers() {
+			var PREFIX = "There will be ";
+			
+			//get variables from the input boxes
+			var guest = document.getElementById('guestNumbers').value;
+			var table = document.getElementById('tableNumbers').value;
+			
+			//case when user forgot either input values for guests and tables
+			if(!guest || !table) {
+				document.getElementById('outputResult2').innerHTML = "Please enter both number of guests and tables!"
+				return 0;
+			}
+			
+			var regularSizeTable = 0;	//table distributed without remaining guests
+			var guestAverage = 0;		//number of at least guests in each table
+			
+			//calculate table numbers when guests are evenly distributed among tables
+			if ((guest%table) == 0) {
+				guestAverage = guest/table;
+				document.getElementById('outputResult2').innerHTML = PREFIX + table + " tables with " + guestAverage + " guests.";
+				return 0;
+			//calculate tables when there are remaining guests after distributed
+			} else {
+				regularSizeTable = table - (guest%table) ;
+				guestAverage = Math.floor(guest/table);
+			}
+			
+			//calculate remaining tables and guests
+			var additionalSizeTables = table - regularSizeTable;
+			var additionalTablesGuests = Math.floor(guest/table) + 1;
+			
+			//produce output
+			document.getElementById('outputResult2').innerHTML = PREFIX + additionalSizeTables + " tables with " + additionalTablesGuests + " guests and " + regularSizeTable + " tables with " + guestAverage + " guests.";
+			return 0;
+		}
+		</script>
+	</head>
+	
+	<body>
+		<div class="jumbotron text-center">
+			<h2>Math Quizzer</h2>
+		</div>
+		
+		<div class="alert alert-warning" role="alert">
+			<strong>Test Your Math Skills! (Please round your answer to the thousand)</strong>
+			<br>
+			<input type="integer" id="a">
+			<div class="btn-group">
+				<button type="button" class="btn btn-secondary" onclick="setOperator('+');">+</button>
+				<button type="button" class="btn btn-secondary" onclick="setOperator('-');">-</button>
+				<button type="button" class="btn btn-secondary" onclick="setOperator('*');">*</button>
+				<button type="button" class="btn btn-secondary" onclick="setOperator('/');">/</button>
+				<button type="button" class="btn btn-secondary" onclick="setOperator('%');">%</button>
+			</div>
+			<input type="integer" id="b">
+			<strong> = </strong>
+			<input type="integer" id="userAnswer"> <br>
+			<br>
+			<button type="button" class="btn btn-warning btn-lg role="alert" onclick="checkAnswer();"> Check Your Answer! </button>
+			<p id="outputResult"></p>
+		</div>
+		
+		<nav class="navbar fixed-bottom navbar-light bg-light">
+			<div class="small"> Huan Mai &copy; 2019 Mathematic (Applied).</div>
+		</nav>
+		
+		<div class="jumbotron text-center">
+			<h2>Wedding Banquet Table Planner App</h2>
+		</div>
+		
+		<div class="alert alert-warning" role="alert">
+			<strong>Input the number of guests and  the number of tables you are going to use</strong>
+			<br>
+			Number of guests <input type="integer" id="guestNumbers"> <br>
+			<br>
+			Number of tables <input type="integer" id="tableNumbers"> <br>
+			<br>
+			<button type="button" class="btn btn-warning btn-lg role="alert" onclick="calcTableNumbers();"> Return Answer! </button>
+			<p id="outputResult2"></p>
+		</div>
+		
+		<nav class="navbar fixed-bottom navbar-light bg-light">
+			<div class="small"> Huan Mai &copy; 2019 Mathematic (Applied).</div>
+		</nav>
+	</body>
+</html>
